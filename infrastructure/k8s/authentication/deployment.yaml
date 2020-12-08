@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: authentication
+  template:
+    metadata:
+      labels:
+        service: authentication
+    spec:
+      containers:
+        - name: authentication
+          image: marius24/authentication-service
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: JWT_SECRET
+              value: "ultra-super-secret-fsdsgdfhhtrcsacsa"
