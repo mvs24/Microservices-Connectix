@@ -7,7 +7,7 @@ export default (
   res: Response,
   _next: NextFunction
 ) => {
-  console.log(err);
+  console.log("error", err);
 
   if (err instanceof AppError) {
     if (process.env.NODE_ENV === "development") {

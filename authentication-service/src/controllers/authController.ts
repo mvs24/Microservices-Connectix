@@ -32,7 +32,7 @@ const validateEmailAndPassword: (
   next: NextFunction,
   passwordConfirmRequired: boolean
 ) => {
-  if (validator.isEmail(email)) {
+  if (!validator.isEmail(email)) {
     return next(
       new AppError("Email is invalid. Plase provide a valid email!", 400)
     );

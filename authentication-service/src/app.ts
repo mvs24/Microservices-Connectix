@@ -7,6 +7,7 @@ import { natsWrapper } from "./natsWrapper";
 
 const app = express();
 
+app.set("trust proxy", true);
 app.use(express.json());
 
 app.use("/api/users", userRouter);
@@ -24,20 +25,19 @@ app.use(globalErrorHandler);
     throw new Error("NATS_URL is not defined!");
   }
 
-  mongoose.connect(
-    "mongodb://mongo-cluster-ip:27017/users",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    },
-    () => {
-      console.log("Authentication Database connected successfully!");
-    }
-  );
+  mongoose.set("useCreateIndex", true);
+  mongoose.set("useFindAndModify", false);
+  mongoose.set("useUnifiedTopology", true);
 
+  const options = {
+    useNewUrlParser: true,
+    bufferCommands: false, // Disable mongoose buffering
+    bufferMaxEntries: 0, // and MongoDB driver buffering
+  };
   try {
+    await mongoose.connect("mongodb://mongo-cluster-ip:27017/users", options);
+    console.log("Authentication Database connected successfully!");
+
     await natsWrapper.connect({
       clusterId: process.env.NATS_CLUSTER_ID,
       clientId: process.env.NATS_CLIENT_ID,

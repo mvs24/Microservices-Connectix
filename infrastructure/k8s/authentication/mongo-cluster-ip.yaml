@@ -4,7 +4,7 @@ metadata:
   name: mongo-cluster-ip
 spec:
   selector:
-    app: authentication-mongo
+    service: authentication-mongo
   ports:
     - port: 27017
       targetPort: 27017
