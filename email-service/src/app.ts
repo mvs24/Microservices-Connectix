@@ -1,17 +1,5 @@
-import express, { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
-
-import userRouter from "./routes/userRoutes";
-import globalErrorHandler from "./controllers/errorController";
+import { UserCreatedListener } from "./events/UserCreatedListener";
 import { natsWrapper } from "./natsWrapper";
-
-const app = express();
-
-app.use(express.json());
-
-app.use("/api/users", userRouter);
-
-app.use(globalErrorHandler);
 
 (async () => {
   if (!process.env.NATS_CLUSTER_ID) {
@@ -23,19 +11,6 @@ app.use(globalErrorHandler);
   if (!process.env.NATS_URL) {
     throw new Error("NATS_URL is not defined!");
   }
-
-  mongoose.connect(
-    "mongodb://mongo-cluster-ip:27017/users",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    },
-    () => {
-      console.log("Authentication Database connected successfully!");
-    }
-  );
 
   try {
     await natsWrapper.connect({
@@ -50,9 +25,9 @@ app.use(globalErrorHandler);
     });
     process.on("SIGINT", () => natsWrapper.stan.close());
     process.on("SIGTERM", () => natsWrapper.stan.close());
+
+    new UserCreatedListener(natsWrapper.stan).listen();
   } catch (error) {
-    console.error(error);
+    console.error("error", error);
   }
 })();
-
-export default app;

@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/userModel";
 import validator from "validator";
+import { UserCreatedPublisher } from "../events/UserCreatedPublisher";
+import { natsWrapper } from "../natsWrapper";
 
 const signToken = (userId: string) => {
   if (!process.env.JWT_SECRET) {
@@ -68,6 +70,12 @@ export const signup = asyncWrapper(
     });
 
     await user.save();
+
+    new UserCreatedPublisher(natsWrapper.stan).publish({
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+    });
 
     const token = signToken(user._id);
 

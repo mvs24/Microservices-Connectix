@@ -1,0 +1,20 @@
+{
+  "name": "email-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@marius98/common": "^1.0.28",
+    "@types/nodemailer": "^6.4.0",
+    "node-nats-streaming": "^0.3.2",
+    "nodemailer": "^6.4.16",
+    "ts-node-dev": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "ts-node-dev --inspect -- src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

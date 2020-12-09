@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-deployment
+spec:
+  selector:
+    matchLabels:
+      service: email
+  template:
+    metadata:
+      labels:
+        service: email
+    spec:
+      containers:
+        - name: email
+          image: marius24/email-service
+          env:
+            # - name: EMAIL_HOST
+            #   value: 'smtp.mailtrap.io'
+            # - name: EMAIL_PORT
+            #   value: 2525
+            # - name: EMAIL_USERNAME
+            #   value: 'a49c7354a425c6'
+            # - name: EMAIL_PASSWORD
+            #   value: '33aec33e2f6e07'
+            # - name: EMAIL_FROM
+            # - value: "instaclonemv@gmail.com"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: "http://nats-cluster-ip:4222"
+            - name: NATS_CLUSTER_ID
+              value: connectix

@@ -16,3 +16,11 @@ build:
         manual:
           - src: "src"
             dest: .
+    - image: marius24/email-service
+      context: email-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src"
+            dest: .
