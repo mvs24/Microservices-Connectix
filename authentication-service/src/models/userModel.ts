@@ -1,5 +1,5 @@
+import crypto from "crypto";
 import mongoose from "mongoose";
-import validator from "validator";
 import bcrypt from "bcryptjs";
 
 interface UserAttrs {
@@ -21,6 +21,7 @@ export interface UserDocument extends mongoose.Document {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   passwordChangedAt?: Date;
+  createPasswordResetToken(): string;
 }
 
 interface UserModel extends mongoose.Model<UserDocument> {
@@ -60,6 +61,19 @@ userSchema.methods.correctPassword = async (
 
 userSchema.statics.build = function (attrs: UserAttrs): UserDocument {
   return new User(attrs);
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 userSchema.pre("save", async function (next) {

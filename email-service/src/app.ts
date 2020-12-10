@@ -1,3 +1,4 @@
+import { ForgotPasswordListener } from "./events/ForgotPasswordListener";
 import { UserCreatedListener } from "./events/UserCreatedListener";
 import { natsWrapper } from "./natsWrapper";
 
@@ -27,6 +28,7 @@ import { natsWrapper } from "./natsWrapper";
     process.on("SIGTERM", () => natsWrapper.stan.close());
 
     new UserCreatedListener(natsWrapper.stan).listen();
+    new ForgotPasswordListener(natsWrapper.stan).listen();
   } catch (error) {
     console.error("error", error);
   }

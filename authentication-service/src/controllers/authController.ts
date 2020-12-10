@@ -7,6 +7,7 @@ import User from "../models/userModel";
 import validator from "validator";
 import { UserCreatedPublisher } from "../events/UserCreatedPublisher";
 import { natsWrapper } from "../natsWrapper";
+import { ForgotPasswordPublisher } from "../events/ForgotPasswordPublisher";
 
 const signToken = (user: UserDocument) => {
   if (!process.env.JWT_SECRET) {
@@ -118,9 +119,35 @@ export const login = asyncWrapper(
   }
 );
 
-export const getMe = (req: Request, res: Response, next: NextFunction) => {
-  return res.status(200).json({
-    status: "success",
-    data: req.user,
-  });
-};
+export const forgotPassword = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    if (!validator.isEmail(email)) {
+      return next(
+        new AppError("Email is invalid. Plase provide a valid email!", 400)
+      );
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(new AppError("User with this email does not exists!", 404));
+    }
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    new ForgotPasswordPublisher(natsWrapper.stan).publish({
+      resetToken,
+      email,
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Reset token sent to email!",
+    });
+  }
+);
+
+export const resetPassword = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {}
+);
