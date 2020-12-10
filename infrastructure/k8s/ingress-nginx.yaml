@@ -14,3 +14,7 @@ spec:
             backend:
               serviceName: authentication-cluster-ip
               servicePort: 3000
+          - path: /api/posts/?(.*)
+            backend:
+              serviceName: post-cluster-ip
+              servicePort: 3000

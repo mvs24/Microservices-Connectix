@@ -9,7 +9,7 @@
   "author": "Marius Vasili",
   "license": "ISC",
   "dependencies": {
-    "@marius98/common": "^1.0.38",
+    "@marius98/common": "^1.0.39",
     "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.9",
     "@types/jsonwebtoken": "^8.5.0",

@@ -1,7 +1,6 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
-import userRouter from "./routes/userRoutes";
 import { globalErrorHandler } from "@marius98/common";
 import { natsWrapper } from "./natsWrapper";
 
@@ -9,8 +8,6 @@ const app = express();
 
 app.set("trust proxy", true);
 app.use(express.json());
-
-app.use("/api/users", userRouter);
 
 app.use(globalErrorHandler);
 
@@ -26,12 +23,12 @@ app.use(globalErrorHandler);
   }
 
   try {
-    await mongoose.connect("mongodb://mongo-cluster-ip:27017/users", {
+    await mongoose.connect("mongodb://mongo-cluster-ip:27017/posts", {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
     });
-    console.log("Authentication Database connected successfully!");
+    console.log("Post Database connected successfully!");
 
     await natsWrapper.connect({
       clusterId: process.env.NATS_CLUSTER_ID,
