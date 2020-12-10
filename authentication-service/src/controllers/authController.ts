@@ -2,21 +2,17 @@ import { NextFunction, Request, Response } from "express";
 import { asyncWrapper, AppError } from "@marius98/common";
 import jwt from "jsonwebtoken";
 
+import { UserDocument } from "../models/userModel";
 import User from "../models/userModel";
 import validator from "validator";
 import { UserCreatedPublisher } from "../events/UserCreatedPublisher";
 import { natsWrapper } from "../natsWrapper";
 
-const signToken = (userId: string) => {
+const signToken = (user: UserDocument) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_KEY is not defined!");
   }
-  return jwt.sign(
-    {
-      id: userId,
-    },
-    process.env.JWT_SECRET
-  );
+  return jwt.sign({ user }, process.env.JWT_SECRET);
 };
 
 const validateEmailAndPassword: (
@@ -77,7 +73,8 @@ export const signup = asyncWrapper(
       email: user.email,
     });
 
-    const token = signToken(user._id);
+    user.password = "";
+    const token = signToken(user);
 
     res.status(201).json({
       status: "success",
@@ -106,7 +103,8 @@ export const login = asyncWrapper(
       );
     }
 
-    const token = signToken(user._id);
+    user.password = "";
+    const token = signToken(user);
 
     res.status(201).json({
       status: "success",
@@ -119,3 +117,10 @@ export const login = asyncWrapper(
     });
   }
 );
+
+export const getMe = (req: Request, res: Response, next: NextFunction) => {
+  return res.status(200).json({
+    status: "success",
+    data: req.user,
+  });
+};

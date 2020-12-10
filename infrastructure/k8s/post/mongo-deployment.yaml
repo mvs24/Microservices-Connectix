@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      service: post-mongo
+  template:
+    metadata:
+      labels:
+        service: post-mongo
+    spec:
+      containers:
+        - name: post-mongo
+          image: mongo

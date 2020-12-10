@@ -24,3 +24,11 @@ build:
         manual:
           - src: "src"
             dest: .
+    - image: marius24/post-service
+      context: post-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src"
+            dest: .

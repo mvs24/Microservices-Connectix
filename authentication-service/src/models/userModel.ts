@@ -11,7 +11,7 @@ interface UserAttrs {
   photo?: string;
 }
 
-interface UserDocument extends mongoose.Document {
+export interface UserDocument extends mongoose.Document {
   name: string;
   lastname: string;
   email: string;
@@ -62,11 +62,11 @@ userSchema.statics.build = function (attrs: UserAttrs): UserDocument {
   return new User(attrs);
 };
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   //@ts-ignore
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   //@ts-ignore
   this.passwordConfirm = undefined;
 

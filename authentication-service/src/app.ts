@@ -25,17 +25,12 @@ app.use(globalErrorHandler);
     throw new Error("NATS_URL is not defined!");
   }
 
-  mongoose.set("useCreateIndex", true);
-  mongoose.set("useFindAndModify", false);
-  mongoose.set("useUnifiedTopology", true);
-
-  const options = {
-    useNewUrlParser: true,
-    bufferCommands: false, // Disable mongoose buffering
-    bufferMaxEntries: 0, // and MongoDB driver buffering
-  };
   try {
-    await mongoose.connect("mongodb://mongo-cluster-ip:27017/users", options);
+    await mongoose.connect("mongodb://mongo-cluster-ip:27017/users", {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    });
     console.log("Authentication Database connected successfully!");
 
     await natsWrapper.connect({
