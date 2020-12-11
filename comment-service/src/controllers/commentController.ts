@@ -2,6 +2,7 @@ import { AppError, asyncWrapper } from "@marius98/common";
 import { NextFunction, Request, Response } from "express";
 import { CommentCreatedPublisher } from "../events/publishers/CommentCreatedPublisher";
 import Comment from "../models/commentModel";
+import Post from "../models/postModel";
 import { natsWrapper } from "../natsWrapper";
 
 export const createComment = asyncWrapper(
@@ -10,6 +11,13 @@ export const createComment = asyncWrapper(
 
     if (!content || !post) {
       return next(new AppError("Content and post must be defined", 400));
+    }
+
+    const postExists = await Post.findById(post);
+    if (!postExists) {
+      return next(
+        new AppError("Post with the specified id does not exists", 404)
+      );
     }
 
     const comment = Comment.build({

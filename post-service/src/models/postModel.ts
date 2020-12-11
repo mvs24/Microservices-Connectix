@@ -5,6 +5,7 @@ interface PostAttrs {
   postType: string;
   content: string;
   user: string;
+  createdAt: Date;
 }
 
 interface PostDocument extends mongoose.Document {
@@ -29,7 +30,7 @@ const postSchema = new mongoose.Schema({
   },
   content: String,
   user: String,
-  createdAt: Date.now,
+  createdAt: Date,
 });
 
 postSchema.set("versionKey", "version");

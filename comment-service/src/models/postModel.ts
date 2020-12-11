@@ -6,7 +6,7 @@ interface PostAttrs {
   user: string;
   version: number;
   createdAt: Date;
-  id: string;
+  _id: string;
 }
 
 interface PostDocument extends mongoose.Document {
@@ -19,6 +19,7 @@ interface PostDocument extends mongoose.Document {
 
 interface PostModel extends mongoose.Model<PostDocument> {
   build(attrs: PostAttrs): PostDocument;
+  findByEvent(id: string, version: number): PostDocument;
 }
 
 const postSchema = new mongoose.Schema({
@@ -31,13 +32,20 @@ const postSchema = new mongoose.Schema({
   },
   content: String,
   user: String,
-  createdAt: Date.now,
+  createdAt: Date,
 });
 
 postSchema.set("versionKey", "version");
 
 postSchema.statics.build = function (attrs: PostAttrs) {
   return new Post(attrs);
+};
+
+postSchema.statics.findByEvent = async function (id: string, version: number) {
+  return await Post.findOne({
+    _id: id,
+    version: version - 1,
+  });
 };
 
 const Post = mongoose.model<PostDocument, PostModel>("Post", postSchema);

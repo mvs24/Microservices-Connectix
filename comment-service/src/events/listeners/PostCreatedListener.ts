@@ -14,7 +14,7 @@ export class PostCreatedListener extends Listener<PostCreatedEvent> {
       postType: data.postType,
       version: data.version,
       user: data.user,
-      id: data.id,
+      _id: data.id,
     });
     await post.save();
 

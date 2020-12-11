@@ -8,12 +8,16 @@ export class PostUpdatedListener extends Listener<PostUpdatedEvent> {
   queueGroup = queueGroup;
 
   async eventHandler(data: PostUpdatedEvent["data"], msg: Message) {
-    await Post.findByIdAndUpdate(data.id, {
-      content: data.content,
-      postType: data.postType,
-      version: data.version,
-    });
+    try {
+      const post = Post.findByEvent(data.id, data.version);
+      post.content = data.content;
+      post.postType = data.postType;
+      post.version = data.version;
+      await post.save();
 
-    msg.ack();
+      msg.ack();
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

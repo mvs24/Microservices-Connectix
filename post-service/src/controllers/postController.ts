@@ -42,6 +42,7 @@ export const createPost = asyncWrapper(
       content,
       postType,
       user: req.user._id,
+      createdAt: new Date(),
     });
     await post.save();
 
