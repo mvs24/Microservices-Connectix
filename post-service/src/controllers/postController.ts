@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { APIFeatures, AppError, asyncWrapper } from "@marius98/common";
+import { AppError, asyncWrapper } from "@marius98/common";
 import Post from "../models/postModel";
 import { PostCreatedPublisher } from "../events/publishers/PostCreatedPublisher";
 import { natsWrapper } from "../natsWrapper";
@@ -72,7 +72,8 @@ export const updatePost = asyncWrapper(
     if (!post) {
       return next(new AppError("No post found with that id", 404));
     }
-    controlPostOwner(post.user, req.user.id, next);
+
+    controlPostOwner(post.user, req.user._id, next);
 
     post.content = content || post.content;
     post.postType = postType || post.postType;
@@ -102,7 +103,8 @@ export const deletePost = asyncWrapper(
     if (!post) {
       return next(new AppError("No post found with that id", 404));
     }
-    controlPostOwner(post.user, req.user.id, next);
+
+    controlPostOwner(post.user, req.user._id, next);
 
     await post.remove();
 
