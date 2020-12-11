@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { NextFunction, Request, Response } from "express";
 import { asyncWrapper, AppError } from "@marius98/common";
 import jwt from "jsonwebtoken";
@@ -80,7 +81,7 @@ export const signup = asyncWrapper(
     res.status(201).json({
       status: "success",
       token,
-      user: {
+      data: {
         name: user.name,
         lastname: user.lastname,
         email: user.email,
@@ -110,7 +111,7 @@ export const login = asyncWrapper(
     res.status(201).json({
       status: "success",
       token,
-      user: {
+      data: {
         name: user.name,
         lastname: user.lastname,
         email: user.email,
@@ -136,10 +137,19 @@ export const forgotPassword = asyncWrapper(
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    new ForgotPasswordPublisher(natsWrapper.stan).publish({
-      resetToken,
-      email,
-    });
+    try {
+      await new ForgotPasswordPublisher(natsWrapper.stan).publish({
+        resetToken,
+        email,
+      });
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+
+      await user.save();
+
+      return next(new AppError("Something went wrong sending the email.", 500));
+    }
 
     res.status(200).json({
       status: "success",
@@ -149,5 +159,48 @@ export const forgotPassword = asyncWrapper(
 );
 
 export const resetPassword = asyncWrapper(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { resetToken } = req.params;
+    const { password, passwordConfirm } = req.body;
+
+    if (!resetToken) {
+      return next(new AppError("Please specify reset token.", 400));
+    }
+
+    if (!password || !passwordConfirm) {
+      return next(
+        new AppError("Password and password confirm must be defined", 400)
+      );
+    }
+
+    const hashedResetToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedResetToken,
+      passwordResetExpires: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return next(new AppError("No user with this reset token found!", 404));
+    }
+
+    user.password = password;
+    user.passwordConfirm = passwordConfirm;
+    await user.save();
+
+    const token = signToken(user);
+
+    res.status(200).json({
+      status: "success",
+      token,
+      data: {
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      },
+    });
+  }
 );
