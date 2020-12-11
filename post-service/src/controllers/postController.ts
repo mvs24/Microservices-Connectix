@@ -6,6 +6,16 @@ import { natsWrapper } from "../natsWrapper";
 import { PostUpdatedPublisher } from "../events/publishers/PostUpdatedPublisher";
 import { PostDeletedPublisher } from "../events/publishers/PostDeletedPublisher";
 
+const controlPostOwner = (
+  postUserId: string,
+  userId: string,
+  next: NextFunction
+) => {
+  if (postUserId.toString() !== userId.toString()) {
+    return next(new AppError("You are not allowed to modify this post.", 403));
+  }
+};
+
 export const getAllPosts = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     // const features = new APIFeatures(Post.find(), req.query)
@@ -60,12 +70,14 @@ export const updatePost = asyncWrapper(
     if (!post) {
       return next(new AppError("No post found with that id", 404));
     }
+    controlPostOwner(post.user, req.user.id, next);
 
     post.content = content || post.content;
     post.postType = postType || post.postType;
     await post.save();
 
     new PostUpdatedPublisher(natsWrapper.stan).publish({
+      id: post._id,
       postType: post.postType,
       content: post.content,
       user: req.user.id,
@@ -83,7 +95,14 @@ export const updatePost = asyncWrapper(
 export const deletePost = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    await Post.findByIdAndDelete(id);
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return next(new AppError("No post found with that id", 404));
+    }
+    controlPostOwner(post.user, req.user.id, next);
+
+    await post.remove();
 
     new PostDeletedPublisher(natsWrapper.stan).publish({
       id,

@@ -5,6 +5,10 @@ import * as postController from "../controllers/postController";
 
 const router = express.Router();
 
-router.route("/").get(protect, postController.createPost);
+router
+  .route("/")
+  .post(protect, postController.createPost)
+  .patch(protect, postController.updatePost)
+  .delete(protect, postController.deletePost);
 
 export default router;
