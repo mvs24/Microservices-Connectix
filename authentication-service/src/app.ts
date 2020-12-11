@@ -1,8 +1,8 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
 import userRouter from "./routes/userRoutes";
-import { globalErrorHandler } from "@marius98/common";
+import { AppError, globalErrorHandler } from "@marius98/common";
 import { natsWrapper } from "./natsWrapper";
 
 const app = express();
@@ -11,6 +11,10 @@ app.set("trust proxy", true);
 app.use(express.json());
 
 app.use("/api/users", userRouter);
+
+app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
+  return next(new AppError("This route is not yet defined", 400));
+});
 
 app.use(globalErrorHandler);
 

@@ -6,9 +6,9 @@ import jwt from "jsonwebtoken";
 import { UserDocument } from "../models/userModel";
 import User from "../models/userModel";
 import validator from "validator";
-import { UserCreatedPublisher } from "../events/UserCreatedPublisher";
+import { UserCreatedPublisher } from "../events/publishers/UserCreatedPublisher";
 import { natsWrapper } from "../natsWrapper";
-import { ForgotPasswordPublisher } from "../events/ForgotPasswordPublisher";
+import { ForgotPasswordPublisher } from "../events/publishers/ForgotPasswordPublisher";
 
 const signToken = (user: UserDocument) => {
   if (!process.env.JWT_SECRET) {
