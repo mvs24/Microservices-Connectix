@@ -6,6 +6,7 @@ interface PostAttrs {
   user: string;
   version: number;
   createdAt: Date;
+  id: string;
 }
 
 interface PostDocument extends mongoose.Document {

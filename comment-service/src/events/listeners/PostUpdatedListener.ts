@@ -13,5 +13,7 @@ export class PostUpdatedListener extends Listener<PostUpdatedEvent> {
       postType: data.postType,
       version: data.version,
     });
+
+    msg.ack();
   }
 }

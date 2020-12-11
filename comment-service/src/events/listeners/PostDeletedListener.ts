@@ -9,5 +9,7 @@ export class PostDeletedListener extends Listener<PostDeletedEvent> {
 
   async eventHandler(data: PostDeletedEvent["data"], msg: Message) {
     await Post.findByIdAndDelete(data.id);
+
+    msg.ack();
   }
 }

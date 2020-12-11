@@ -46,6 +46,7 @@ export const createPost = asyncWrapper(
     await post.save();
 
     new PostCreatedPublisher(natsWrapper.stan).publish({
+      id: post._id,
       postType: post.postType,
       content: post.content,
       user: req.user._id,

@@ -4,6 +4,9 @@ import { AppError, globalErrorHandler } from "@marius98/common";
 
 import commentRouter from "./routes/commentRoutes";
 import { natsWrapper } from "./natsWrapper";
+import { PostCreatedListener } from "./events/listeners/PostCreatedListener";
+import { PostDeletedListener } from "./events/listeners/PostDeletedListener";
+import { PostUpdatedListener } from "./events/listeners/PostUpdatedListener";
 
 const app = express();
 
@@ -42,6 +45,10 @@ app.use(globalErrorHandler);
       clientId: process.env.NATS_CLIENT_ID,
       connectionUrl: process.env.NATS_URL,
     });
+
+    new PostCreatedListener(natsWrapper.stan).listen();
+    new PostDeletedListener(natsWrapper.stan).listen();
+    new PostUpdatedListener(natsWrapper.stan).listen();
 
     natsWrapper.stan.on("close", () => {
       console.log("NATS connection closed!");
