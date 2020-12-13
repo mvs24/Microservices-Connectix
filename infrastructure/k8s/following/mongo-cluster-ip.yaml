@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: following-cluster-ip
+spec:
+  selector:
+    service: post-following
+  ports:
+    - port: 27017
+      targetPort: 27017

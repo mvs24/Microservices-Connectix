@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: following-mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      service: following-mongo
+  template:
+    metadata:
+      labels:
+        service: following-mongo
+    spec:
+      containers:
+        - name: following-mongo
+          image: mongo

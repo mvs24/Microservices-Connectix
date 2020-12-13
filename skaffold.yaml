@@ -40,3 +40,11 @@ build:
         manual:
           - src: "src"
             dest: .
+    - image: marius24/following-service
+      context: following-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src"
+            dest: .

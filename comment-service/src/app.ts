@@ -36,7 +36,7 @@ app.use(globalErrorHandler);
     let uriConnection: string =
       process.env.NODE_ENV === "development"
         ? "mongodb://host.docker.internal:27017/connectixComments"
-        : "mongodb://mongo-cluster-ip:27017/users";
+        : "mongodb://mongo-cluster-ip:27017/comments";
 
     await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,

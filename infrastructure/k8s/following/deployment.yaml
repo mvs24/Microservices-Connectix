@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: following-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: following
+  template:
+    metadata:
+      labels:
+        service: following
+    spec:
+      containers:
+        - name: following
+          image: marius24/following-service
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: "http://nats-cluster-ip:4222"
+            - name: NATS_CLUSTER_ID
+              value: connectix

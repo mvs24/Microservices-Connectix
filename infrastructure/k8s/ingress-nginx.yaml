@@ -22,3 +22,7 @@ spec:
             backend:
               serviceName: comment-cluster-ip
               servicePort: 3000
+          - path: /api/followings/?(.*)
+            backend:
+              serviceName: following-cluster-ip
+              servicePort: 3000
