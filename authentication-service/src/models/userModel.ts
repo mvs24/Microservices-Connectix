@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface UserAttrs {
   name: string;
@@ -21,6 +22,7 @@ export interface UserDocument extends mongoose.Document {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   passwordChangedAt?: Date;
+  version: number;
   createPasswordResetToken(): string;
 }
 
@@ -51,6 +53,9 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   passwordChangedAt: Date,
 });
+
+userSchema.set("versionKey", "version");
+userSchema.plugin(updateIfCurrentPlugin);
 
 userSchema.methods.correctPassword = async (
   candidatePassword: string,

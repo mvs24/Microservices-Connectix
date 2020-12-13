@@ -73,6 +73,7 @@ export const signup = asyncWrapper(
       name: user.name,
       lastname: user.lastname,
       email: user.email,
+      version: user.version,
     });
 
     user.password = "";

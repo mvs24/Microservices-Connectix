@@ -3,11 +3,14 @@ import mongoose from "mongoose";
 import { AppError, globalErrorHandler } from "@marius98/common";
 
 import { natsWrapper } from "./natsWrapper";
+import followingRouter from "./routes/followingRoutes";
 
 const app = express();
 
 app.set("trust proxy", true);
 app.use(express.json());
+
+app.use("/api/followings", followingRouter);
 
 app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
   return next(new AppError("This route is not yet defined", 400));
