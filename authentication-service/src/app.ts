@@ -30,7 +30,12 @@ app.use(globalErrorHandler);
   }
 
   try {
-    await mongoose.connect("mongodb://mongo-cluster-ip:27017/users", {
+    let uriConnection: string =
+      process.env.NODE_ENV === "development"
+        ? "mongodb://host.docker.internal:27017/users"
+        : "mongodb://mongo-cluster-ip:27017/users";
+
+    await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
