@@ -14,11 +14,14 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
         lastname: data.lastname,
         email: data.email,
         version: data.version,
+        _id: data.id,
       });
 
       await user.save();
 
       msg.ack();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

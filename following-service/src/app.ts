@@ -4,6 +4,7 @@ import { AppError, globalErrorHandler } from "@marius98/common";
 
 import { natsWrapper } from "./natsWrapper";
 import followingRouter from "./routes/followingRoutes";
+import { UserCreatedListener } from "./events/listeners/UserCreatedListener";
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.use(globalErrorHandler);
     let uriConnection: string =
       process.env.NODE_ENV === "development"
         ? "mongodb://host.docker.internal:27017/connectixFollowings"
-        : "mongodb://mongo-cluster-ip:27017/connectixFollowings";
+        : "mongodb://mongo-cluster-ip:27017/followings";
 
     await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,
@@ -48,6 +49,8 @@ app.use(globalErrorHandler);
       clientId: process.env.NATS_CLIENT_ID,
       connectionUrl: process.env.NATS_URL,
     });
+
+    new UserCreatedListener(natsWrapper.stan).listen();
 
     natsWrapper.stan.on("close", () => {
       console.log("NATS connection closed!");

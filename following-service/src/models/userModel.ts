@@ -6,6 +6,7 @@ interface UserAttrs {
   email: string;
   photo?: string;
   version: number;
+  _id: string;
 }
 
 export interface UserDocument extends mongoose.Document {
