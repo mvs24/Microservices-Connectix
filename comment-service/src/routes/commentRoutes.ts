@@ -8,6 +8,11 @@ const router = express.Router();
 
 router.route("/").post(protect, commentController.createComment);
 
+router
+  .route("/:id")
+  .patch(protect, commentController.updateComment)
+  .delete(protect, commentController.deleteComment);
+
 router.get("/posts", async (req, res, next) => {
   const posts = await Post.find();
   res.send(posts);

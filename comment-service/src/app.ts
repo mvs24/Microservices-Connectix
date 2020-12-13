@@ -33,11 +33,17 @@ app.use(globalErrorHandler);
   }
 
   try {
-    await mongoose.connect("mongodb://mongo-cluster-ip:27017/comments", {
+    let uriConnection: string =
+      process.env.NODE_ENV === "development"
+        ? "mongodb://host.docker.internal:27017/connectixComments"
+        : "mongodb://mongo-cluster-ip:27017/users";
+
+    await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
     });
+
     console.log("Comment Database connected successfully!");
 
     await natsWrapper.connect({
