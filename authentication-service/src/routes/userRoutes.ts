@@ -13,6 +13,9 @@ router.post("/login", authController.login);
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:resetToken", authController.resetPassword);
 
-router.get("/me", protect, userController.getMe);
+router
+  .route("/me")
+  .get(protect, userController.getMe)
+  .patch(protect, userController.updateMe);
 
 export default router;

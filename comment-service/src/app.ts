@@ -42,6 +42,7 @@ app.use(globalErrorHandler);
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     });
 
     console.log("Comment Database connected successfully!");

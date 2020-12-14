@@ -41,6 +41,7 @@ app.use(globalErrorHandler);
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     });
 
     console.log("Moderation Database connected successfully!");
