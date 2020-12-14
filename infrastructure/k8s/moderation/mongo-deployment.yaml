@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      service: moderation-mongo
+  template:
+    metadata:
+      labels:
+        service: moderation-mongo
+    spec:
+      containers:
+        - name: moderation-mongo
+          image: mongo

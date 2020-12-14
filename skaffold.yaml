@@ -48,3 +48,11 @@ build:
         manual:
           - src: "src"
             dest: .
+    - image: marius24/moderation-service
+      context: moderation-service
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src"
+            dest: .

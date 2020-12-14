@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: moderation
+  template:
+    metadata:
+      labels:
+        service: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: marius24/moderation-service
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: "http://nats-cluster-ip:4222"
+            - name: NATS_CLUSTER_ID
+              value: connectix
