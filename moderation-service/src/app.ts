@@ -4,6 +4,9 @@ import { AppError, globalErrorHandler } from "@marius98/common";
 
 import { natsWrapper } from "./natsWrapper";
 import { UserCreatedListener } from "./events/listeners/UserCreatedListener";
+import { PostCreatedListener } from "./events/listeners/PostCreatedListener";
+import { PostUpdatedListener } from "./events/listeners/PostUpdatedListener";
+import { PostDeletedListener } from "./events/listeners/PostDeletedListener";
 
 const app = express();
 
@@ -53,6 +56,9 @@ app.use(globalErrorHandler);
     });
 
     new UserCreatedListener(natsWrapper.stan).listen();
+    new PostCreatedListener(natsWrapper.stan).listen();
+    new PostUpdatedListener(natsWrapper.stan).listen();
+    new PostDeletedListener(natsWrapper.stan).listen();
 
     process.on("SIGINT", () => natsWrapper.stan.close());
     process.on("SIGTERM", () => natsWrapper.stan.close());

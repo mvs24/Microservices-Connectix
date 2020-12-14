@@ -4,6 +4,9 @@ import Following from "../models/followingModel";
 import User from "../models/userModel";
 import { Status } from "../models/followingModel";
 import { ProfileState } from "../models/userModel";
+import { FollowingCreatedPublisher } from "../events/publishers/FollowingCreatedPublisher";
+import { natsWrapper } from "../natsWrapper";
+import { FollowingUpdatedPublisher } from "../events/publishers/FollowingUpdatedPublisher";
 
 export const addFollowing = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,6 +30,14 @@ export const addFollowing = asyncWrapper(
     });
 
     await following.save();
+
+    new FollowingCreatedPublisher(natsWrapper.stan).publish({
+      _id: following._id,
+      follower: following.follower,
+      followingUser: following.followingUser,
+      status: following.status,
+      version: following.version,
+    });
 
     res.status(201).json({
       status: "success",
@@ -63,6 +74,14 @@ export const updateFollowing = asyncWrapper(
     followingDocument.status = status;
 
     await followingDocument.save();
+
+    new FollowingUpdatedPublisher(natsWrapper.stan).publish({
+      _id: followingDocument._id,
+      follower: followingDocument.follower,
+      followingUser: followingDocument.followingUser,
+      status: followingDocument.status,
+      version: followingDocument.version,
+    });
 
     res.status(200).json({
       status: "success",
