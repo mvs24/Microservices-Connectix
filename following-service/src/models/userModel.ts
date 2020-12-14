@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+export enum ProfileState {
+  Public = "public",
+  Private = "private",
+}
+
+export enum Roles {
+  Admin = "admin",
+  User = "user",
+}
+
 interface UserAttrs {
   name: string;
   lastname: string;
@@ -14,6 +24,8 @@ export interface UserDocument extends mongoose.Document {
   lastname: string;
   email: string;
   photo?: string;
+  profile: string;
+  role: string;
   version: number;
 }
 
@@ -29,6 +41,19 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   photo: String,
+  profile: {
+    type: String,
+    enum: {
+      values: [ProfileState.Public, ProfileState.Private],
+      message: "Profile must be either public or private",
+    },
+    default: ProfileState.Public,
+  },
+  role: {
+    type: String,
+    enum: [Roles.Admin, Roles.User],
+    default: Roles.User,
+  },
   email: {
     type: String,
   },

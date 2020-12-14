@@ -3,6 +3,16 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
+export enum ProfileState {
+  Public = "public",
+  Private = "private",
+}
+
+export enum Roles {
+  Admin = "admin",
+  User = "user",
+}
+
 interface UserAttrs {
   name: string;
   lastname: string;
@@ -23,6 +33,8 @@ export interface UserDocument extends mongoose.Document {
   passwordResetExpires?: Date;
   passwordChangedAt?: Date;
   version: number;
+  profile: ProfileState;
+  role: Roles;
   createPasswordResetToken(): string;
 }
 
@@ -38,6 +50,19 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   photo: String,
+  profile: {
+    type: String,
+    enum: {
+      values: [ProfileState.Private, ProfileState.Public],
+      message: "Profile must be either public or private",
+    },
+    default: ProfileState.Public,
+  },
+  role: {
+    type: String,
+    enum: [Roles.User, Roles.Admin],
+    default: Roles.User,
+  },
   email: {
     type: String,
   },

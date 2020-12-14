@@ -5,6 +5,9 @@ import * as followingController from "../controllers/followingController";
 
 const router = express.Router();
 
+router.get("/", protect, followingController.getFollowings);
+router.get("/followers", protect, followingController.getFollowers);
+
 router
   .route("/:followingUserId")
   .post(protect, followingController.addFollowing);

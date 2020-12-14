@@ -36,7 +36,7 @@ const followingSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: Object.values(Status),
+    enum: [Status.Pending, Status.Accepted, Status.Rejected],
     default: Status.Pending,
   },
   followingAt: Date,

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import Following from "../models/followingModel";
 import User from "../models/userModel";
 import { Status } from "../models/followingModel";
+import { ProfileState } from "../models/userModel";
 
 export const addFollowing = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +20,10 @@ export const addFollowing = asyncWrapper(
       follower: req.user._id,
       followingUser: followingUserId,
       followingAt: new Date(),
-      status: Status.Pending,
+      status:
+        followingUser.profile === ProfileState.Public
+          ? Status.Accepted
+          : Status.Pending,
     });
 
     await following.save();
@@ -36,13 +40,14 @@ export const updateFollowing = asyncWrapper(
     const { followerId } = req.params;
 
     const { status } = req.body;
-    if (status !== Status.Accepted || status !== Status.Rejected) {
+
+    if (!status) {
+      return next(new AppError("Status must be defined", 400));
+    }
+    if (status !== Status.Accepted && status !== Status.Rejected) {
       return next(
         new AppError("Status must be either Accepted or Rejected", 400)
       );
-    }
-    if (!status) {
-      return next(new AppError("Status must be defined", 400));
     }
 
     const followingDocument = await Following.findOne({
@@ -62,6 +67,34 @@ export const updateFollowing = asyncWrapper(
     res.status(200).json({
       status: "success",
       data: followingDocument,
+    });
+  }
+);
+
+export const getFollowers = asyncWrapper(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const followers = await Following.find({
+      followingUser: req.user._id,
+      status: Status.Accepted,
+    }).populate("follower");
+
+    res.status(200).json({
+      status: "success",
+      data: followers,
+    });
+  }
+);
+
+export const getFollowings = asyncWrapper(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const followings = await Following.find({
+      follower: req.user._id,
+      status: Status.Accepted,
+    }).populate("followingUser");
+
+    res.status(200).json({
+      status: "success",
+      data: followings,
     });
   }
 );

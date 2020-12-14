@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: following-cluster-ip
+  name: mongo-cluster-ip
 spec:
   selector:
-    service: post-following
+    service: following-mongo
   ports:
     - port: 27017
       targetPort: 27017
