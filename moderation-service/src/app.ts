@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { AppError, globalErrorHandler } from "@marius98/common";
 
 import { natsWrapper } from "./natsWrapper";
+import { UserCreatedListener } from "./events/listeners/UserCreatedListener";
 
 const app = express();
 
@@ -50,6 +51,9 @@ app.use(globalErrorHandler);
       console.log("NATS connection closed!");
       process.exit();
     });
+
+    new UserCreatedListener(natsWrapper.stan).listen();
+
     process.on("SIGINT", () => natsWrapper.stan.close());
     process.on("SIGTERM", () => natsWrapper.stan.close());
   } catch (error) {

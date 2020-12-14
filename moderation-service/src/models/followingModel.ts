@@ -5,7 +5,8 @@ interface FollowingAttrs {
   follower: string;
   followingUser: string;
   status: Status;
-  followingAt: Date;
+  _id: string;
+  version: number;
 }
 
 interface FollowingDocument extends mongoose.Document {
@@ -13,7 +14,6 @@ interface FollowingDocument extends mongoose.Document {
   followingUser: string;
   status: Status;
   version: number;
-  followingAt: Date;
 }
 
 interface FollowingModel extends mongoose.Model<FollowingDocument> {
@@ -34,8 +34,9 @@ const followingSchema = new mongoose.Schema({
     enum: [Status.Pending, Status.Accepted, Status.Rejected],
     default: Status.Pending,
   },
-  followingAt: Date,
 });
+
+followingSchema.set("versionKey", "version");
 
 followingSchema.statics.build = function (attrs: FollowingAttrs) {
   return new Following(attrs);
