@@ -2,6 +2,7 @@ import crypto from "crypto";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import validator from "validator";
 
 export enum ProfileState {
   Public = "public",
@@ -20,6 +21,7 @@ interface UserAttrs {
   password: string;
   passwordConfirm: string;
   photo?: string;
+  profile?: ProfileState;
 }
 
 export interface UserDocument extends mongoose.Document {
@@ -45,9 +47,11 @@ interface UserModel extends mongoose.Model<UserDocument> {
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    required: [true, "Name must be defined"],
   },
   lastname: {
     type: String,
+    required: [true, "Lastname must be defined"],
   },
   photo: String,
   profile: {
@@ -65,10 +69,12 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    validate: [validator.isEmail, "Please provide a valid email"],
   },
   password: {
     type: String,
     select: false,
+    minlength: 6,
   },
   passwordConfirm: {
     type: String,

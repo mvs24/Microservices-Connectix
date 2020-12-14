@@ -5,6 +5,7 @@ import { AppError, globalErrorHandler } from "@marius98/common";
 import { natsWrapper } from "./natsWrapper";
 import followingRouter from "./routes/followingRoutes";
 import { UserCreatedListener } from "./events/listeners/UserCreatedListener";
+import { UserUpdatedListener } from "./events/listeners/UserUpdatedListener";
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use(globalErrorHandler);
     });
 
     new UserCreatedListener(natsWrapper.stan).listen();
+    new UserUpdatedListener(natsWrapper.stan).listen();
 
     natsWrapper.stan.on("close", () => {
       console.log("NATS connection closed!");

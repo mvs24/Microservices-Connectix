@@ -17,6 +17,7 @@ interface UserAttrs {
   photo?: string;
   version: number;
   _id: string;
+  profile?: ProfileState;
 }
 
 export interface UserDocument extends mongoose.Document {
