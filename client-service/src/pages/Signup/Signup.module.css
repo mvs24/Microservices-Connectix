@@ -1,0 +1,33 @@
+.loginContainer {
+  border: 0.5px solid black;
+  min-height: 50vh;
+  width: 17%;
+  padding: 3rem;
+  margin: 4rem auto;
+  background: white;
+}
+.headingSecondary {
+  color: #8e8e8e;
+  font-size: 1.4rem;
+  border-bottom: none;
+  text-decoration: none;
+}
+.headingPrimary {
+  font-size: 1.6rem;
+  color: rgb(38, 38, 38);
+}
+.inputContainer {
+  padding: 0.5rem 0.1rem;
+}
+.btnContainer {
+  margin: 1rem 10%;
+}
+.headingTertiary {
+  font-size: 1.1rem;
+  color: rgb(38, 38, 38);
+  display: block;
+  border-color: transparent;
+}
+.link {
+  text-decoration: none;
+}

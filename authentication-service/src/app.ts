@@ -35,6 +35,8 @@ app.use(globalErrorHandler);
         ? "mongodb://host.docker.internal:27017/users"
         : "mongodb://mongo-cluster-ip:27017/users";
 
+    console.log(uriConnection);
+
     await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,
       useNewUrlParser: true,

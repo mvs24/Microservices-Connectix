@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: client-cluster-ip
+  name: post-cluster-ip
 spec:
   selector:
-    service: client
+    service: post
   ports:
-    - name: client-cluster-ip
+    - name: post-cluster-ip
       protocol: TCP
       port: 3000
       targetPort: 3000

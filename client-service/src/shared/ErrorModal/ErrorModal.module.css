@@ -1,0 +1,43 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.errorModal {
+  background: #fafafa;
+  width: 40%;
+  z-index: 1;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+}
+
+.errorHeader {
+  background: rgb(214, 78, 78);
+  color: white;
+  padding: 1rem;
+  font-size: 1.4rem;
+  border-radius: 2px;
+  font-weight: 100;
+}
+.error {
+  padding: 1rem;
+  color: #999;
+}
+.removeIcon {
+  position: absolute;
+  top: 7%;
+  right: 2%;
+  font-size: 1.4rem;
+  color: white;
+  cursor: pointer;
+}

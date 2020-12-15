@@ -56,11 +56,11 @@ build:
         manual:
           - src: "src"
             dest: .
-    - image: marius24/client-service
-      context: client-service
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: "src"
-            dest: .
+    # - image: marius24/client-service
+    #   context: client-service
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: "src"
+    #         dest: .

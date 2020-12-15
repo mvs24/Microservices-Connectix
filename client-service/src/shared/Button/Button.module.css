@@ -1,0 +1,50 @@
+.btn {
+  border: none;
+  border-radius: 1px;
+  padding: 0.6rem 1.8rem;
+  color: white;
+  text-transform: capitalize;
+  font-weight: 400;
+  outline: none;
+  transition: all 0.17s;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.7rem 0.6rem rgba(0, 0, 0, 0.4);
+}
+
+.btn:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.success {
+  background: linear-gradient(to right, #55c57a, #28b485);
+}
+
+.danger {
+  background: linear-gradient(to right, #ff7730, #ffb900);
+}
+
+.pink {
+  background: linear-gradient(to right, #ff3366, #ba265d);
+}
+.blue {
+  background: linear-gradient(to right, #2998ff, #5643fa);
+}
+
+.neutral {
+  background: #faf9f9;
+  color: #777;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  transform: translateY(0);
+  box-shadow: none;
+  background: #f7f7f7;
+  color: #ccc;
+}
