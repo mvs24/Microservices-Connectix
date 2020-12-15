@@ -44,5 +44,14 @@ export const updateMe = asyncWrapper(
       profile: user.profile,
       photo: user.photo,
     });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      },
+    });
   }
 );
