@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Status } from "@marius98/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface FollowingAttrs {
   follower: string;
@@ -36,6 +37,9 @@ const followingSchema = new mongoose.Schema({
   },
   followingAt: Date,
 });
+
+followingSchema.set("versionKey", "version");
+followingSchema.plugin(updateIfCurrentPlugin);
 
 followingSchema.statics.build = function (attrs: FollowingAttrs) {
   return new Following(attrs);

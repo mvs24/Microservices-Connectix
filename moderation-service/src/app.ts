@@ -8,6 +8,8 @@ import { PostCreatedListener } from "./events/listeners/PostCreatedListener";
 import { PostUpdatedListener } from "./events/listeners/PostUpdatedListener";
 import { PostDeletedListener } from "./events/listeners/PostDeletedListener";
 import { UserUpdatedListener } from "./events/listeners/UserUpdatedListener";
+import { FollowingCreatedListener } from "./events/listeners/FollowingCreatedListener";
+import { FollowingUpdatedListener } from "./events/listeners/FollowingUpdatedListener";
 
 const app = express();
 
@@ -62,6 +64,8 @@ app.use(globalErrorHandler);
     new PostUpdatedListener(natsWrapper.stan).listen();
     new PostDeletedListener(natsWrapper.stan).listen();
     new UserUpdatedListener(natsWrapper.stan).listen();
+    new FollowingCreatedListener(natsWrapper.stan).listen();
+    new FollowingUpdatedListener(natsWrapper.stan).listen();
 
     process.on("SIGINT", () => natsWrapper.stan.close());
     process.on("SIGTERM", () => natsWrapper.stan.close());

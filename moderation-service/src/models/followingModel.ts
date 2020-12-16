@@ -18,6 +18,7 @@ interface FollowingDocument extends mongoose.Document {
 
 interface FollowingModel extends mongoose.Model<FollowingDocument> {
   build(attrs: FollowingAttrs): FollowingDocument;
+  findByEvent(_id: string, version: number): Promise<FollowingDocument>;
 }
 
 const followingSchema = new mongoose.Schema({
@@ -40,6 +41,16 @@ followingSchema.set("versionKey", "version");
 
 followingSchema.statics.build = function (attrs: FollowingAttrs) {
   return new Following(attrs);
+};
+
+followingSchema.statics.findByEvent = async function (
+  _id: string,
+  version: number
+) {
+  return await Following.findOne({
+    _id,
+    version: version - 1,
+  });
 };
 
 const Following = mongoose.model<FollowingDocument, FollowingModel>(
