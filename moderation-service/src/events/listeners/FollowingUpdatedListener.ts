@@ -1,4 +1,9 @@
-import { FollowingUpdatedEvent, Listener, Subjects } from "@marius98/common";
+import {
+  AppError,
+  FollowingUpdatedEvent,
+  Listener,
+  Subjects,
+} from "@marius98/common";
 import { Message } from "node-nats-streaming";
 import Following from "../../models/followingModel";
 import { queueGroup } from "../queueGroup";
@@ -9,14 +14,16 @@ export class FollowingUpdatedListener extends Listener<FollowingUpdatedEvent> {
 
   async eventHandler(data: FollowingUpdatedEvent["data"], msg: Message) {
     try {
-      console.log(data);
-      // const following = await Following.findByEvent(data._id, data.version);
-      // console.log(following);
+      const following = await Following.findByEvent(data._id, data.version);
 
-      // following.status = data.status;
-      // following.version = data.version;
+      if (!following) {
+        throw new Error("No following found");
+      }
 
-      // await following.save();
+      following.status = data.status;
+      following.version = data.version;
+
+      await following.save();
 
       msg.ack();
     } catch (err) {

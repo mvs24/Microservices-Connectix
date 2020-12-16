@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { AppError, globalErrorHandler } from "@marius98/common";
 
 import { natsWrapper } from "./natsWrapper";
+import moderationRouter from "./routes/moderationRoutes";
 import { UserCreatedListener } from "./events/listeners/UserCreatedListener";
 import { PostCreatedListener } from "./events/listeners/PostCreatedListener";
 import { PostUpdatedListener } from "./events/listeners/PostUpdatedListener";
@@ -15,6 +16,8 @@ const app = express();
 
 app.set("trust proxy", true);
 app.use(express.json());
+
+app.use("/api/moderations", moderationRouter);
 
 app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
   return next(new AppError("This route is not yet defined", 400));
