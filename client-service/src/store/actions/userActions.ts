@@ -12,10 +12,33 @@ import {
   LOGIN_SUCCESS,
   Post,
   REMOVE_ERROR,
+  TOGGLE_LIKE,
+  GET_ME,
 } from "../types/userTypes";
-
+import { store } from "../../index";
 export const signToken = (token: string | null) => {
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+};
+
+export const getMe = (): ThunkAction<void, any, unknown, any> => async (
+  dispatch
+) => {
+  try {
+    dispatch({
+      type: LOADING,
+    });
+    const { data } = await axios.get("/api/users/me");
+
+    dispatch({
+      type: GET_ME,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: error.response.data.message,
+    });
+  }
 };
 
 export const login = (
@@ -66,6 +89,10 @@ export const getPosts = (): ThunkAction<void, any, unknown, any> => async (
       if (likes[i].data.length > 0) {
         likes[i].data.forEach((like: Like) => {
           post.likes.push(like);
+          const userState = store.getState();
+          if (like.user._id === userState.user.data?._id) {
+            post.likedByMe = true;
+          }
         });
       }
     });
@@ -88,6 +115,32 @@ export const getLikes = (
   try {
     const { data } = await axios.get(`/api/postLikes/${postId}`);
     return data;
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const toggleLike = (
+  postId: string,
+  liked: boolean
+): ThunkAction<void, any, unknown, any> => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOADING,
+    });
+
+    const postLikeData = await axios.post(`/api/postLikes/${postId}`);
+    dispatch({
+      type: TOGGLE_LIKE,
+      payload: {
+        postLikeData: postLikeData.data ? postLikeData.data.data : "",
+        postId,
+        liked,
+      },
+    });
   } catch (error) {
     dispatch({
       type: ERROR,

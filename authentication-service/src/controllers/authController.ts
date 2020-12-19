@@ -117,6 +117,7 @@ export const login = asyncWrapper(
         name: user.name,
         lastname: user.lastname,
         email: user.email,
+        _id: user._id,
       },
     });
   }

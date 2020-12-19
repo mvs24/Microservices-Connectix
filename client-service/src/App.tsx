@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Redirect, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
-import { signToken } from "./store/actions/userActions";
-import axios from "axios";
+import { getMe, signToken } from "./store/actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import PrivateRoute from "./hoc/PrivateRoute";
+import { RootState } from ".";
 
 function App() {
   const [
@@ -12,20 +14,43 @@ function App() {
     setControlingAuthentication,
   ] = useState<boolean>(true);
 
+  const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user);
+
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      signToken(`${localStorage.getItem("jwt")}`);
-    }
-    setControlingAuthentication(false);
+    (async () => {
+      if (localStorage.getItem("jwt")) {
+        signToken(`${localStorage.getItem("jwt")}`);
+        await dispatch(getMe());
+        setControlingAuthentication(false);
+      } else {
+        setControlingAuthentication(false);
+      }
+    })();
   }, []);
 
   if (controlingAuthentication) return null;
 
   return (
     <BrowserRouter>
-      <Route path="/" exact component={Login} />
-      <Route path="/signup" exact component={Signup} />
-      <Route path="/home" exact component={Home} />
+      <PrivateRoute
+        path="/home"
+        exact
+        WrappedComponent={Home}
+        restricted={true}
+      />
+      <PrivateRoute
+        path="/"
+        exact
+        WrappedComponent={Login}
+        restricted={false}
+      />
+      <PrivateRoute
+        path="/signup"
+        exact
+        WrappedComponent={Signup}
+        restricted={false}
+      />
     </BrowserRouter>
   );
 }

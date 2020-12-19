@@ -5,12 +5,14 @@ export const REMOVE_ERROR = "REMOVE_ERROR";
 export const LOADING = "LOADING";
 export const ERROR = "ERROR";
 export const GET_POSTS = "GET_POSTS";
+export const TOGGLE_LIKE = "TOGGLE_LIKE";
+export const GET_ME = "GET_ME";
 
 export interface LoginPayload {
+  _id: string;
   name: string;
   email: string;
   lastname: string;
-  token: string;
 }
 
 export interface LoginSuccess {
@@ -40,6 +42,15 @@ interface RemoveError {
   type: typeof REMOVE_ERROR;
 }
 
+interface ToggleLike {
+  type: typeof TOGGLE_LIKE;
+  payload: {
+    postLikeData: Like;
+    postId: string;
+    liked: boolean;
+  };
+}
+
 export interface Like {
   id?: string;
   post: string;
@@ -57,6 +68,11 @@ export interface Post {
   likedByMe: boolean;
 }
 
+interface Me {
+  type: typeof GET_ME;
+  payload: { _id: string; name: string; email: string; lastname: string };
+}
+
 interface GetPosts {
   type: typeof GET_POSTS;
   payload: {
@@ -72,4 +88,6 @@ export type UserActions =
   | RemoveError
   | Loading
   | Error
-  | GetPosts;
+  | GetPosts
+  | ToggleLike
+  | Me;

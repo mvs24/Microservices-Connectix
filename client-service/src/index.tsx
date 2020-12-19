@@ -32,7 +32,7 @@ export interface RootState {
   user: UserInitialState;
 }
 
-const store = createStore(
+export const store = createStore(
   combineReducers({
     user: userReducer,
   }),

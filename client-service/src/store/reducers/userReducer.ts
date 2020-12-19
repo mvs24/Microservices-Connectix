@@ -9,6 +9,9 @@ import {
   Post,
   LOADING,
   ERROR,
+  TOGGLE_LIKE,
+  Like,
+  GET_ME,
 } from "../types/userTypes";
 
 export interface UserInitialState {
@@ -32,6 +35,13 @@ export default (
   action: UserActions
 ): UserInitialState => {
   switch (action.type) {
+    case GET_ME:
+      return {
+        ...state,
+        isAuthenticated: true,
+        data: action.payload,
+        loading: false,
+      };
     case LOGIN_SUCCESS:
       return {
         ...state,
@@ -70,6 +80,42 @@ export default (
       return {
         ...state,
         error: action.payload,
+        loading: false,
+      };
+    case TOGGLE_LIKE:
+      const updatedState = {
+        ...state,
+      };
+
+      if (!updatedState.homePosts)
+        return {
+          ...state,
+        };
+
+      const updatedHomePosts = [...updatedState.homePosts];
+
+      const post = updatedHomePosts.find(
+        (post: Post) => post._id === action.payload.postId
+      );
+      if (!post) {
+        return {
+          ...state,
+        };
+      }
+
+      if (post.likedByMe) {
+        post.likedByMe = !post.likedByMe;
+        post.likes = post.likes.filter(
+          (like: Like) => like.post !== action.payload.postId
+        );
+      } else {
+        post.likedByMe = !post.likedByMe;
+        post.likes.push(action.payload.postLikeData);
+      }
+
+      return {
+        ...state,
+        homePosts: updatedHomePosts,
         loading: false,
       };
     default:
