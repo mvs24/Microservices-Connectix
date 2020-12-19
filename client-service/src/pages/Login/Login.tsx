@@ -6,10 +6,11 @@ import Button from "../../shared/Button/Button";
 import Input from "../../shared/Input/Input";
 import classes from "./Login.module.css";
 import { inputChangedHandler, Requirements } from "../../utils/inputHandler";
-import { login } from "../../store/actions/userActions";
+import { login, removeError } from "../../store/actions/userActions";
 import { LoginData } from "./types";
 import { RootState } from "../../index";
 import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
+import ErrorModal from "../../shared/ErrorModal/ErrorModal";
 
 interface LoginInput {
   placeholder: string;
@@ -56,13 +57,14 @@ const Login = () => {
   const history = useHistory();
 
   const loginHandler = async () => {
-    const userData: LoginData = {
-      email: loginState.email.value,
-      password: loginState.password.value,
-    };
+    try {
+      const userData: LoginData = {
+        email: loginState.email.value,
+        password: loginState.password.value,
+      };
 
-    await dispatch(login(userData));
-    history.push("/home");
+      dispatch(login(userData, history));
+    } catch (error) {}
   };
 
   const loginStateArray: LoginInput[] = Object.values(loginState);
@@ -70,6 +72,11 @@ const Login = () => {
   return (
     <div className={classes.loginContainer}>
       {userState.loading && <LoadingSpinner />}
+      {userState.error && (
+        <ErrorModal removeHandler={() => dispatch(removeError())}>
+          {userState.error}
+        </ErrorModal>
+      )}
       <h1 className={classes.headingPrimary}>Connectix</h1>
       <h2 className={classes.headingSecondary}>Login to Connectix</h2>
       <div className={classes.inputsContainer}>
