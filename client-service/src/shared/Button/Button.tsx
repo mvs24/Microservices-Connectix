@@ -2,14 +2,14 @@ import React from "react";
 import classes from "./Button.module.css";
 
 export enum ButtonState {
-  success = "success",
-  danger = "danger",
-  pink = "pink",
-  blue = "blue",
+  Success = "Success",
+  Danger = "Danger",
+  Pink = "Pink",
+  Blue = "Blue",
 }
 
 interface Props {
-  onClick: Function;
+  onClick: (e: any) => void;
   title: string;
   color?: string;
   backgroundColor?: string;
@@ -17,13 +17,17 @@ interface Props {
 }
 
 const Button = (props: Props) => {
-  const { title, color, backgroundColor, state } = props;
+  const { title, color, backgroundColor, state, onClick } = props;
   const classNames = [classes.btn];
   if (state) classNames.push(classes[state]);
   else classNames.push(classes["pink"]);
 
   return (
-    <button style={{ color, backgroundColor }} className={classNames.join(" ")}>
+    <button
+      onClick={onClick}
+      style={{ color, backgroundColor }}
+      className={classNames.join(" ")}
+    >
       {title}
     </button>
   );

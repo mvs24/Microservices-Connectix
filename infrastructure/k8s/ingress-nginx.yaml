@@ -30,7 +30,3 @@ spec:
             backend:
               serviceName: moderation-cluster-ip
               servicePort: 3000
-          # - path: /?(.*)
-          #   backend:
-          #     serviceName: client-cluster-ip
-          #     servicePort: 3000

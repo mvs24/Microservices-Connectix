@@ -1,9 +1,11 @@
+import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import Button from "../../shared/Button/Button";
 import Input from "../../shared/Input/Input";
-import { inputChangedHandler, Requirements } from "../../utils/inputHandler";
 import classes from "./Login.module.css";
+import { inputChangedHandler, Requirements } from "../../utils/inputHandler";
 
 interface LoginInput {
   placeholder: string;
@@ -46,6 +48,14 @@ const Login = () => {
     },
   });
 
+  const loginHandler = async () => {
+    const { data } = await axios.post("http://connectix.dev/api/users/login", {
+      email: "m@m.com",
+      password: "123123",
+    });
+    console.log(data);
+  };
+
   const loginStateArray: LoginInput[] = Object.values(loginState);
 
   return (
@@ -67,7 +77,7 @@ const Login = () => {
         ))}
       </div>
       <div className={classes.btnContainer}>
-        <Button title="Login" onClick={() => {}} />
+        <Button title="Login" onClick={loginHandler} />
       </div>
 
       <Link to="/signup" className={classes.link}>

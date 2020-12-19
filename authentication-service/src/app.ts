@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import userRouter from "./routes/userRoutes";
 import { AppError, globalErrorHandler } from "@marius98/common";
@@ -8,6 +9,7 @@ import { natsWrapper } from "./natsWrapper";
 const app = express();
 
 app.set("trust proxy", true);
+// app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", userRouter);
@@ -34,8 +36,6 @@ app.use(globalErrorHandler);
       process.env.NODE_ENV === "development"
         ? "mongodb://host.docker.internal:27017/users"
         : "mongodb://mongo-cluster-ip:27017/users";
-
-    console.log(uriConnection);
 
     await mongoose.connect(uriConnection, {
       useUnifiedTopology: true,
