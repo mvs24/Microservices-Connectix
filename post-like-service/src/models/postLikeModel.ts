@@ -16,17 +16,22 @@ interface PostLikeModel extends mongoose.Model<PostLikeDocument> {
   build(attrs: PostLikeAttrs): PostLikeDocument;
 }
 
-const postLikeSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+const postLikeSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      required: [true, "A post like must have a post"],
+    },
   },
-  post: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Post",
-    required: [true, "A post like must have a post"],
-  },
-});
+  {
+    toJSON: { virtuals: true },
+  }
+);
 
 postLikeSchema.set("versionKey", "version");
 postLikeSchema.plugin(updateIfCurrentPlugin);

@@ -5,10 +5,12 @@ import axios from "axios";
 import {
   ERROR,
   GET_POSTS,
+  Like,
   LOADING,
   LOGIN_ERROR,
   LOGIN_LOADING,
   LOGIN_SUCCESS,
+  Post,
   REMOVE_ERROR,
 } from "../types/userTypes";
 
@@ -51,11 +53,41 @@ export const getPosts = (): ThunkAction<void, any, unknown, any> => async (
     });
 
     const { data } = await axios.get("/api/moderations/posts");
+    const posts: Post[] = data.data;
+
+    const likes: any = await Promise.all(
+      posts.map(async (post: Post) => {
+        post.likes = [];
+        post.likedByMe = false;
+        return await dispatch(getLikes(post._id));
+      })
+    );
+    posts.forEach((post: Post, i: number) => {
+      if (likes[i].data.length > 0) {
+        likes[i].data.forEach((like: Like) => {
+          post.likes.push(like);
+        });
+      }
+    });
 
     dispatch({
       type: GET_POSTS,
       payload: data,
     });
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getLikes = (
+  postId: string
+): ThunkAction<void, any, unknown, any> => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/postLikes/${postId}`);
+    return data;
   } catch (error) {
     dispatch({
       type: ERROR,

@@ -14,9 +14,7 @@ const Home = () => {
   const userState = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    (() => {
-      dispatch(getPosts());
-    })();
+    dispatch(getPosts());
   }, []);
 
   return (

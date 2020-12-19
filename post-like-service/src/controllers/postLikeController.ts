@@ -41,7 +41,7 @@ export const getLikes = asyncWrapper(
       post: id,
     }).populate({
       path: "user",
-      select: "name lastname",
+      select: "name lastname photo",
     });
 
     res.status(200).json({

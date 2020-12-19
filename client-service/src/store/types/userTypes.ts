@@ -40,12 +40,21 @@ interface RemoveError {
   type: typeof REMOVE_ERROR;
 }
 
+export interface Like {
+  id?: string;
+  post: string;
+  user: { _id: string; name: string; lastname: string };
+  _id: string;
+}
+
 export interface Post {
   content: string;
   createdAt: Date;
   postType: string;
   user: string;
   _id: string;
+  likes: Like[];
+  likedByMe: boolean;
 }
 
 interface GetPosts {

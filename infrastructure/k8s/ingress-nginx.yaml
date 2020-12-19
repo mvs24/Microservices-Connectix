@@ -30,3 +30,7 @@ spec:
             backend:
               serviceName: moderation-cluster-ip
               servicePort: 3000
+          - path: /api/postLikes/?(.*)
+            backend:
+              serviceName: post-like-cluster-ip
+              servicePort: 3000
