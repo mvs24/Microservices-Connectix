@@ -1,11 +1,15 @@
-import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Button from "../../shared/Button/Button";
 import Input from "../../shared/Input/Input";
 import classes from "./Login.module.css";
 import { inputChangedHandler, Requirements } from "../../utils/inputHandler";
+import { login } from "../../store/actions/userActions";
+import { LoginData } from "./types";
+import { RootState } from "../../index";
+import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
 
 interface LoginInput {
   placeholder: string;
@@ -33,7 +37,7 @@ const Login = () => {
       requirements: {
         isEmail: true,
       },
-      type: "password",
+      type: "text",
     },
     password: {
       value: "",
@@ -47,19 +51,25 @@ const Login = () => {
       },
     },
   });
+  const userState = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const loginHandler = async () => {
-    const { data } = await axios.post("http://connectix.dev/api/users/login", {
-      email: "m@m.com",
-      password: "123123",
-    });
-    console.log(data);
+    const userData: LoginData = {
+      email: loginState.email.value,
+      password: loginState.password.value,
+    };
+
+    await dispatch(login(userData));
+    history.push("/home");
   };
 
   const loginStateArray: LoginInput[] = Object.values(loginState);
 
   return (
     <div className={classes.loginContainer}>
+      {userState.loading && <LoadingSpinner />}
       <h1 className={classes.headingPrimary}>Connectix</h1>
       <h2 className={classes.headingSecondary}>Login to Connectix</h2>
       <div className={classes.inputsContainer}>
