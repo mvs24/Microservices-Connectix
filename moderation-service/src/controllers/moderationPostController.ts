@@ -48,3 +48,17 @@ export const getMyFollowerAndFollowingsPosts = asyncWrapper(
     });
   }
 );
+
+export const getMyPosts = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const myPosts = await Post.find({
+      user: req.user._id,
+    });
+
+    res.status(200).json({
+      status: "success",
+      results: myPosts.length,
+      data: myPosts,
+    });
+  }
+);

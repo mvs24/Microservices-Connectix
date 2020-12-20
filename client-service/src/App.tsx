@@ -4,9 +4,10 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import { getMe, signToken } from "./store/actions/userActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import PrivateRoute from "./hoc/PrivateRoute";
-import { RootState } from ".";
+import Me from "./pages/Me/Me";
+import EditMe from "./pages/EditMe/EditMe";
 
 function App() {
   const [
@@ -49,6 +50,13 @@ function App() {
         exact
         WrappedComponent={Signup}
         restricted={false}
+      />
+      <PrivateRoute path="/me" exact WrappedComponent={Me} restricted={true} />
+      <PrivateRoute
+        path="/edit-me"
+        exact
+        WrappedComponent={EditMe}
+        restricted={true}
       />
     </BrowserRouter>
   );

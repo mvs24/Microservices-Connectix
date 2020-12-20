@@ -8,8 +8,6 @@ import { Post } from "../../store/types/userTypes";
 import PostComponent from "./components/Post";
 import { removeError } from "../../store/actions/userActions";
 import classes from "./Home.module.css";
-import Input from "../../shared/Input/Input";
-import { Link } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 
 const Home = () => {

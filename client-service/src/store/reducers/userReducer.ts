@@ -12,6 +12,7 @@ import {
   TOGGLE_LIKE,
   Like,
   GET_ME,
+  EDIT_ME,
 } from "../types/userTypes";
 
 export interface UserInitialState {
@@ -59,6 +60,17 @@ export default (
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case EDIT_ME:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          //@ts-ignore
+          _id: state.data._id,
+          ...action.payload,
+        },
+        loading: false,
       };
     case REMOVE_ERROR:
       return {
@@ -111,6 +123,7 @@ export default (
         homePosts: updatedHomePosts,
         loading: false,
       };
+
     default:
       return state;
   }

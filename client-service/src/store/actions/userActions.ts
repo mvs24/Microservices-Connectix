@@ -14,8 +14,11 @@ import {
   REMOVE_ERROR,
   TOGGLE_LIKE,
   GET_ME,
+  EDIT_ME,
 } from "../types/userTypes";
 import { store } from "../../index";
+import { EditValues } from "../../pages/EditMe/components/EditProfile/EditProfile";
+
 export const signToken = (token: string | null) => {
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
@@ -63,6 +66,28 @@ export const login = (
     dispatch({
       type: LOGIN_ERROR,
       payload: err.response.data.message,
+    });
+  }
+};
+
+export const editMe = (
+  editValues: EditValues
+): ThunkAction<void, any, unknown, any> => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOADING,
+    });
+
+    const { data } = await axios.patch("/api/users/me", editValues);
+
+    dispatch({
+      type: EDIT_ME,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ERROR,
+      payload: error.response.data.message,
     });
   }
 };

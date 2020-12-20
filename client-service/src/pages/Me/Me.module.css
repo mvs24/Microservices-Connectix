@@ -1,0 +1,24 @@
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+.userData {
+  margin: 0 auto;
+  margin-left: 40%;
+  color: rgb(133, 133, 133);
+  font-weight: 200;
+}
+.editProfile {
+  margin: 0 1rem;
+}
+
+.followersInfo {
+  display: flex;
+  align-items: center;
+}
+.followersInfo h3 {
+  margin: 0.1rem 0.2rem;
+  color: rgb(133, 133, 133);
+  font-weight: 200;
+}

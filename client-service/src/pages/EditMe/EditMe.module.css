@@ -1,0 +1,36 @@
+.editContainer {
+  display: flex;
+  min-height: 50vh;
+}
+
+.options {
+  flex: 0 1 25%;
+  border: 0.3px solid rgb(133, 133, 133);
+}
+.options ul {
+  padding: 0.4rem;
+}
+.options li {
+  font-size: 1.3rem;
+  color: #999;
+  list-style: none;
+  padding: 0.3rem;
+}
+.options li:hover,
+.activeLink {
+  background: white;
+  cursor: pointer;
+  border-bottom: 0.5px solid #999;
+}
+
+.userInfo {
+  border: 0.3px solid rgb(133, 133, 133);
+  flex: 1;
+}
+
+.input {
+  padding: 0.6rem;
+}
+.editMeButton {
+  margin: 1rem 3rem;
+}

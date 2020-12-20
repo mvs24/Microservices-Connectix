@@ -7,6 +7,7 @@ export const ERROR = "ERROR";
 export const GET_POSTS = "GET_POSTS";
 export const TOGGLE_LIKE = "TOGGLE_LIKE";
 export const GET_ME = "GET_ME";
+export const EDIT_ME = "EDIT_ME";
 
 export interface LoginPayload {
   _id: string;
@@ -77,6 +78,16 @@ interface Me {
   payload: { _id: string; name: string; email: string; lastname: string };
 }
 
+interface EditMe {
+  type: typeof EDIT_ME;
+  payload: {
+    name: string;
+    email: string;
+    lastname: string;
+    photo: string;
+  };
+}
+
 interface GetPosts {
   type: typeof GET_POSTS;
   payload: {
@@ -94,4 +105,5 @@ export type UserActions =
   | Error
   | GetPosts
   | ToggleLike
-  | Me;
+  | Me
+  | EditMe;
