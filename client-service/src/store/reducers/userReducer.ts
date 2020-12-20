@@ -103,16 +103,9 @@ export default (
         };
       }
 
-      if (post.likedByMe) {
-        post.likedByMe = !post.likedByMe;
-        post.likes = post.likes.filter(
-          (like: Like) => like.post !== action.payload.postId
-        );
-      } else {
-        post.likedByMe = !post.likedByMe;
-        post.likes.push(action.payload.postLikeData);
-      }
-
+      post.likedByMe = !post.likedByMe;
+      // @ts-ignore
+      post.likes = action.payload.postLikeData.data;
       return {
         ...state,
         homePosts: updatedHomePosts,

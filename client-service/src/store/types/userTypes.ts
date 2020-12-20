@@ -62,7 +62,11 @@ export interface Post {
   content: string;
   createdAt: Date;
   postType: string;
-  user: string;
+  user: {
+    name: string;
+    lastname: string;
+    photo: string;
+  };
   _id: string;
   likes: Like[];
   likedByMe: boolean;

@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PostComponent = (props: Props) => {
-  const { content, likes, likedByMe, _id } = props.post;
+  const { content, likes, likedByMe, _id, user } = props.post;
   const dispatch = useDispatch();
 
   const likeHandler = (postId: string, liked: boolean): void => {
@@ -20,6 +20,13 @@ const PostComponent = (props: Props) => {
 
   return (
     <div className={classes.postContainer}>
+      <div className={classes.userData}>
+        <img src="" alt="" />
+        <div className={classes.userInfo}>
+          <h3 className={classes.headingTertiary}>{user.name}</h3>
+          <h3 className={classes.headingTertiary}>{user.lastname}</h3>
+        </div>
+      </div>
       <div className={classes.postContent}>{content}</div>
       <div className={classes.actions}>
         <div className={classes.heart}>

@@ -10,6 +10,7 @@ export const toggleLike = asyncWrapper(
       user: req.user._id,
       post: id,
     });
+
     if (!postLike) {
       const createdPostLike = PostLike.build({
         user: req.user._id,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Redirect, Route, useLocation } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
@@ -15,7 +15,6 @@ function App() {
   ] = useState<boolean>(true);
 
   const dispatch = useDispatch();
-  const userState = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     (async () => {

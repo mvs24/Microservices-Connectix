@@ -1,3 +1,8 @@
+.postContainer {
+  border: 1px solid rgb(219, 219, 219);
+  padding: 0.5rem;
+  margin: 1.5rem 0;
+}
 .postContent {
   background-color: white;
   border: 1px solid #777;
@@ -26,4 +31,15 @@
 .share {
   font-size: 1.7rem;
   cursor: pointer;
+}
+.userData {
+  display: flex;
+  align-items: center;
+  border: 0.4px solid rgb(239, 239, 239);
+  padding: 0.5rem;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
 }

@@ -132,11 +132,13 @@ export const toggleLike = (
       type: LOADING,
     });
 
-    const postLikeData = await axios.post(`/api/postLikes/${postId}`);
+    await axios.post(`/api/postLikes/${postId}`);
+    const postLikeData = await dispatch(getLikes(postId));
     dispatch({
       type: TOGGLE_LIKE,
       payload: {
-        postLikeData: postLikeData.data ? postLikeData.data.data : "",
+        //@ts-ignore
+        postLikeData,
         postId,
         liked,
       },
